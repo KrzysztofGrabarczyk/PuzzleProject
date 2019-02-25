@@ -12,7 +12,7 @@ namespace Puzzle15
     class Gameboard
     {
         private EmptyCell emptyCell = new EmptyCell { Row = 3, Column = 3 };
-        public Button[,] tiles = new Button[4,4];
+        private Button[,] tiles = new Button[4,4];
         public Grid board = new Grid();
 
         public Gameboard()
@@ -30,6 +30,7 @@ namespace Puzzle15
                     {
                         tiles[i, j] = new Button { Width=100, Height=100, Background = Brushes.CadetBlue };
                         tiles[i, j].Content = randomTileNumbers[i*4+j];
+                        tiles[i, j].Click += new RoutedEventHandler(btnClick);
                     }
                 }
             }
@@ -64,9 +65,6 @@ namespace Puzzle15
                     }
                 }
             }
-
-
-
         }
 
         private List<int> TileNumbersGenerator()
@@ -85,6 +83,11 @@ namespace Puzzle15
             }
             return randomlyArrangedTileNumbers;
             #endregion
+        }
+
+        void btnClick(object sender, RoutedEventArgs e)
+        {
+            Button clickedButton = (Button)sender;
         }
     }
 }

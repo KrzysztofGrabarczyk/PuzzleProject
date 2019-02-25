@@ -26,7 +26,6 @@ namespace Puzzle15
 
             Gameboard gameboard = new Gameboard();
             MainGrid.Children.Add(gameboard.board);
-
         }
     }
 }

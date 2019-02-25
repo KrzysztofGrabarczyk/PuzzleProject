@@ -28,7 +28,16 @@ namespace Puzzle15
                 {
                     if (!(i == 3 && j == 3))
                     {
-                        tiles[i, j] = new Button { Width=100, Height=100, Background = Brushes.CadetBlue };
+                        tiles[i, j] = new Button { Width = 100, Height = 100 };
+                        if ( randomTileNumbers[i*4+j]%2 == 0 )
+                        {
+                            tiles[i, j].Background = Brushes.Gray;
+                        }
+                        else
+                        {
+                            tiles[i, j].Background = Brushes.DarkRed;
+                        }
+                            
                         tiles[i, j].Content = randomTileNumbers[i*4+j];
                         tiles[i, j].Click += new RoutedEventHandler(btnClick);
                     }
@@ -85,9 +94,44 @@ namespace Puzzle15
             #endregion
         }
 
-        void btnClick(object sender, RoutedEventArgs e)
+        private void btnClick(object sender, RoutedEventArgs e)
         {
             Button clickedButton = (Button)sender;
+            int btnRow = Grid.GetRow(clickedButton);
+            int btnCol = Grid.GetColumn(clickedButton);
+
+            if ((Math.Abs(btnRow - emptyCell.Row) + Math.Abs(btnCol - emptyCell.Column)) == 1)
+            {
+                board.Children.Remove(clickedButton);
+
+                Grid.SetRow(clickedButton, emptyCell.Row);
+                Grid.SetColumn(clickedButton, emptyCell.Column);
+
+                board.Children.Add(clickedButton);
+
+                emptyCell.Row = btnRow;
+                emptyCell.Column = btnCol;
+            }
+
+            if ( PlayerWins() ) board.Background = Brushes.Red;
+        }
+
+        private bool PlayerWins()
+        {
+            if (!(emptyCell.Row == 3 && emptyCell.Column == 3)) return false;
+            int btnContent;
+            int btnNum = 1;
+
+            foreach (Button btn in tiles)
+            {
+                if (btn != null)
+                {
+                    btnContent = Int32.Parse(btn.Content.ToString());
+                    if (btnContent != btnNum) return false;
+                    btnNum += 1;
+                }
+            }
+            return true;
         }
     }
 }

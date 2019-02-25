@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Puzzle15"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="450" Width="600">
+    <Grid x:Name="MainGrid" Width="400" Height="400" HorizontalAlignment="Left" VerticalAlignment="Top">
         
     </Grid>
 </Window>

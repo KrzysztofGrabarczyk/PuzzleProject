@@ -23,6 +23,10 @@ namespace Puzzle15
         public MainWindow()
         {
             InitializeComponent();
+
+            Gameboard gameboard = new Gameboard();
+            MainGrid.Children.Add(gameboard.board);
+
         }
     }
 }

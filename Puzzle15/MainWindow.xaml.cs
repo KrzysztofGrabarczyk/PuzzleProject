@@ -25,7 +25,10 @@ namespace Puzzle15
             InitializeComponent();
 
             Gameboard gameboard = new Gameboard();
-            MainGrid.Children.Add(gameboard.board);
+            LeftColumn.Children.Add(gameboard.Board);
+
+            Gameboard gameboard2 = new Gameboard();
+            RightColumn.Children.Add(gameboard2.Board);
         }
     }
 }

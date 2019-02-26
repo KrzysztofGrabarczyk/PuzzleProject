@@ -11,17 +11,20 @@ namespace Puzzle15
 {
     class Gameboard
     {
+        private readonly Button[,] tiles = new Button[4,4];
         private EmptyCell emptyCell = new EmptyCell { Row = 3, Column = 3 };
-        private Button[,] tiles = new Button[4,4];
         public Grid board = new Grid();
 
         public Gameboard()
         {
-            #region Initialize list of randomly arranged tile numbers
+            InicializeTiles();
+            InicializeGrid();
+        }
+
+        private void InicializeTiles()
+        {
             List<int> randomTileNumbers = TileNumbersGenerator();
-            #endregion
-            
-            #region Initialize array of tiles with buttons randomly signed from 1 to 15, last tile leaved with null
+
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -29,25 +32,14 @@ namespace Puzzle15
                     if (!(i == 3 && j == 3))
                     {
                         tiles[i, j] = new Button { Width = 100, Height = 100 };
-                        if ( randomTileNumbers[i*4+j]%2 == 0 )
-                        {
-                            tiles[i, j].Background = Brushes.Gray;
-                        }
-                        else
-                        {
-                            tiles[i, j].Background = Brushes.DarkRed;
-                        }
-                            
-                        tiles[i, j].Content = randomTileNumbers[i*4+j];
-                        tiles[i, j].Click += new RoutedEventHandler(btnClick);
+                        if (randomTileNumbers[i * 4 + j] % 2 == 0) tiles[i, j].Background = Brushes.Gray;
+                        else tiles[i, j].Background = Brushes.DarkRed;
+
+                        tiles[i, j].Content = randomTileNumbers[i * 4 + j];
+                        tiles[i, j].Click += new RoutedEventHandler(TileClick);
                     }
                 }
             }
-            #endregion
-           
-            #region Inicialize game grid
-            InicializeGrid();
-            #endregion
         }
 
         private void InicializeGrid()
@@ -63,14 +55,13 @@ namespace Puzzle15
                     board.ColumnDefinitions.Add(new ColumnDefinition());
                     board.ColumnDefinitions[j].Width = GridLength.Auto;
 
-                    Button buttonAdd = tiles[i, j];
+                    Button tileAdd = tiles[i, j];
 
-                    if (buttonAdd != null)
+                    if (tileAdd != null)
                     {
-                        Grid.SetRow(buttonAdd, i);
-                        Grid.SetColumn(buttonAdd, j);
-                        board.Children.Add(buttonAdd);
-                        //board.buttons[i, j].Click += new RoutedEventHandler(btnClick);
+                        Grid.SetRow(tileAdd, i);
+                        Grid.SetColumn(tileAdd, j);
+                        board.Children.Add(tileAdd);
                     }
                 }
             }
@@ -78,7 +69,6 @@ namespace Puzzle15
 
         private List<int> TileNumbersGenerator()
         {
-            #region Generating randomly arranged list of tile numbers
             const int numberOfTiles = 15;
             List<int> tileNumbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
             List<int> randomlyArrangedTileNumbers = new List<int>();
@@ -87,14 +77,13 @@ namespace Puzzle15
             for (int i = 0; i < numberOfTiles; i++)
             {
                 int randomElementFromTileNumbers = randomNumber.Next(tileNumbers.Count);
-                randomlyArrangedTileNumbers.Add( tileNumbers[ randomElementFromTileNumbers ] );
+                randomlyArrangedTileNumbers.Add(tileNumbers[randomElementFromTileNumbers]);
                 tileNumbers.RemoveAt(randomElementFromTileNumbers);
             }
             return randomlyArrangedTileNumbers;
-            #endregion
         }
 
-        private void btnClick(object sender, RoutedEventArgs e)
+        private void TileClick(object sender, RoutedEventArgs e)
         {
             Button clickedButton = (Button)sender;
             int btnRow = Grid.GetRow(clickedButton);
@@ -112,23 +101,20 @@ namespace Puzzle15
                 emptyCell.Row = btnRow;
                 emptyCell.Column = btnCol;
             }
-
-            if ( PlayerWins() ) board.Background = Brushes.Red;
+            if ( IsPuzzleSolved() ) board.Background = Brushes.Red;
         }
 
-        private bool PlayerWins()
+        private bool IsPuzzleSolved()
         {
             if (!(emptyCell.Row == 3 && emptyCell.Column == 3)) return false;
-            int btnContent;
-            int btnNum = 1;
 
-            foreach (Button btn in tiles)
+            foreach (Button tile in tiles)
             {
-                if (btn != null)
+                if (tile != null)
                 {
-                    btnContent = Int32.Parse(btn.Content.ToString());
-                    if (btnContent != btnNum) return false;
-                    btnNum += 1;
+                    int auxVal = 4 * Grid.GetRow(tile) + Grid.GetColumn(tile) + 1;
+                    int tileContent = Int32.Parse(tile.Content.ToString());
+                    if (tileContent != auxVal) return false;
                 }
             }
             return true;

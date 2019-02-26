@@ -11,6 +11,7 @@ namespace Puzzle15
 {
     public class Gameboard
     {
+        private struct EmptyCell { internal int Row, Column;}
         private readonly Button[,] tiles = new Button[4,4];
         private EmptyCell emptyCell = new EmptyCell { Row = 3, Column = 3 };
         public Grid Board { get; } = new Grid();
@@ -125,4 +126,6 @@ namespace Puzzle15
             return true;
         }
     }
+
+    
 }

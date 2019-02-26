@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace Puzzle15
 {
-    class Gameboard
+    public class Gameboard
     {
         private readonly Button[,] tiles = new Button[4,4];
         private EmptyCell emptyCell = new EmptyCell { Row = 3, Column = 3 };
@@ -101,7 +101,12 @@ namespace Puzzle15
                 emptyCell.Row = btnRow;
                 emptyCell.Column = btnCol;
             }
-            if ( IsPuzzleSolved() ) Board.Background = Brushes.Red;
+            if (IsPuzzleSolved()) DoWhenPuzzleSolved();
+        }
+
+        protected void DoWhenPuzzleSolved()
+        {
+            Board.Background = Brushes.Red;
         }
 
         private bool IsPuzzleSolved()
